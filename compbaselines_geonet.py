@@ -20,7 +20,6 @@ import os
 import datetime
 import ConfigParser
 import numpy as np
-from subprocess import call
 
 # coordinate conversion lat-lon to nzmg
 
@@ -253,7 +252,3 @@ for reg in regions:
             image = os.path.join(plot_dir, reg + '_' + day + '.png')
         # print '  image file = ', image
         plt.savefig(image, dpi=200)
-        # send image to web server
-        cmdstr = '/usr/bin/scp ' + image + ' ' + \
-            user + '@' + server + ':' + webdir
-        call(cmdstr, shell=True)

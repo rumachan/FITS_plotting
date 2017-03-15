@@ -6,7 +6,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import requests
-from subprocess import call
 
 names = ['dt', 'obs', 'err']
 kgs2tpd = 86.4  # conversion kg/s to t/d
@@ -112,6 +111,3 @@ for site in sites:
                 plotdir, siteid + '.' + networkid + '_' + typeid + '_' + methodid + '_' + day + '.png')
         # print '  image file = ', image
         plt.savefig(image, dpi=200)
-        cmdstr = '/usr/bin/scp ' + image + ' ' + \
-            webuser + '@' + webserver + ':' + webdir
-        call(cmdstr, shell=True)

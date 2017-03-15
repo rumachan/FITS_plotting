@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import numpy as np
 import requests
-from subprocess import call
 
 
 def getsite(site):
@@ -314,6 +313,3 @@ for nday, day in days:
     else:
         image = os.path.join(plotdir, 'combi_' + day + '.png')
     plt.savefig(image, dpi=200)
-    cmdstr = '/usr/bin/scp ' + image + ' ' + \
-        webuser + '@' + webserver + ':' + webdir
-    call(cmdstr, shell=True)

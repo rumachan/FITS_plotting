@@ -7,7 +7,6 @@ from dateutil import parser
 import sys
 import os
 import ConfigParser
-from subprocess import call
 
 names = ['dt', 'obs', 'err']
 
@@ -140,6 +139,3 @@ plt.title(title)
 # save plot
 image = os.path.join(plotdir, 'ruapehu_isotope.png')
 plt.savefig(image, dpi=200)
-cmdstr = '/usr/bin/scp ' + image + ' ' + \
-    webuser + '@' + webserver + ':' + webdir
-call(cmdstr, shell=True)

@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import matplotlib
+matplotlib.use('Agg')
 import sys
 import os
 import ConfigParser
@@ -6,7 +8,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import requests
-from subprocess import call
 
 
 def getsite(site):
@@ -122,6 +123,3 @@ plt.title('All observations: daily mean (nobs>=' + str(minobs) + ')')
 # save plot
 image = os.path.join(plotdir, 'daymean' + str(minobs) + '.png')
 plt.savefig(image, dpi=200)
-cmdstr = '/usr/bin/scp ' + image + ' ' + \
-    webuser + '@' + webserver + ':' + webdir
-call(cmdstr, shell=True)

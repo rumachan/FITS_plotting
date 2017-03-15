@@ -6,7 +6,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import requests
-from subprocess import call
 
 
 def getsite(site):
@@ -105,6 +104,3 @@ plt.title('All observations: resample = ' + rs +
 # save plot
 image = os.path.join(plotdir, 'allobs_resample_' + rs + '.png')
 plt.savefig(image, dpi=200)
-cmdstr = '/usr/bin/scp ' + image + ' ' + \
-    webuser + '@' + webserver + ':' + webdir
-call(cmdstr, shell=True)
