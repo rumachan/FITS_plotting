@@ -121,5 +121,5 @@ ax2.set_ylabel('SO2 flux (' + unit2 + ')', color='gray')
 
 plt.title('All observations: daily mean (nobs>=' + str(minobs) + ')')
 # save plot
-image = os.path.join(plotdir, 'daymean' + str(minobs) + '.png')
+image = os.path.join(plotdir, 'mdoas.daymean' + str(minobs) + '.png')
 plt.savefig(image, dpi=200)

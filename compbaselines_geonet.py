@@ -247,8 +247,9 @@ for reg in regions:
                     ax.xaxis.set_minor_locator(minorTick)
         # save region plot
         if day == '365000':  # all data
-            image = os.path.join(plot_dir, reg + '.png')
+            image = os.path.join(plot_dir, 'gps.bll.' + reg + '.png')
         else:
-            image = os.path.join(plot_dir, reg + '_' + day + '.png')
+            image = os.path.join(
+                plot_dir, 'gps.bll.' + reg + '_' + day + '.png')
         # print '  image file = ', image
         plt.savefig(image, dpi=200)

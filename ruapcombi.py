@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import matplotlib
+matplotlib.use('Agg')
 import sys
 import os
 import ConfigParser
@@ -311,5 +313,5 @@ for nday, day in days:
     if day == '365000':  # all data
         image = os.path.join(plotdir, 'combi.png')
     else:
-        image = os.path.join(plotdir, 'combi_' + day + '.png')
+        image = os.path.join(plotdir, 'ruapehu.combi_' + day + '.png')
     plt.savefig(image, dpi=200)

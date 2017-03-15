@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import matplotlib
+matplotlib.use('Agg')
 import sys
 import os
 import ConfigParser
@@ -102,5 +104,5 @@ mean = str(int(dfmean.mean()))
 plt.title('All observations: resample = ' + rs +
           ', cumulative difference relative to mean (' + mean + ')')
 # save plot
-image = os.path.join(plotdir, 'allobs_resample_' + rs + '.png')
+image = os.path.join(plotdir, 'mdoas.allobs_resample_' + rs + '.png')
 plt.savefig(image, dpi=200)
