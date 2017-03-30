@@ -7,6 +7,8 @@
 
 basicdaymean.py scripts/basicdaymean.cfg
 
+combiplot.py scripts/combiplot.cfg
+
 compbaselines_geonet.py scripts/compbaselines.cfg
 
 cumsum.py scripts/cumsum.cfg
