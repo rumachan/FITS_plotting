@@ -114,4 +114,4 @@ else:
 image = os.path.join(plotdir, 'daymean'+str(minobs)+'.png')
 plt.savefig(image, dpi=200)
 cmdstr = '/usr/bin/scp '+ image + ' ' +webuser +'@' + webserver + ':' + webdir
-#call(cmdstr, shell=True)
+call(cmdstr, shell=True)
