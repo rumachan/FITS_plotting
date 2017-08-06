@@ -37,7 +37,8 @@ ysize = float(config.get('plot', 'ysize'))
 ymax = float(config.get('plot', 'ymax'))
 plotdir = config.get('plot', 'dir')
 days = config.items('days')
-minobs = int(config.get('obs', 'minobs'))
+minobs = int(config.get('obs','minobs'))
+tzone = config.get('tzone', 'tzone')
 
 # sites
 site1 = config.get('sites', 'site1')
@@ -91,7 +92,11 @@ df = pd.concat(frames)
 df.sort_values('Datetime', inplace=True)
 df.reset_index(inplace=True)
 
-# number obs per day
+#tzone, ut or nzst
+if (tzone=='nzst'):
+  df['Datetime'] = df['Datetime'] + pd.to_timedelta(12, unit='h')  
+
+#number obs per day
 dfcount = df['obs'].groupby(df['Datetime'].dt.date).count()
 
 # determine condtion, groupby, select based on condition (messy)
@@ -117,9 +122,11 @@ dftpd = dfmean['obs'] * kgs2tpd
 ax2.plot(dfmean.index, dftpd, marker='o',
          markersize=5, color='red', linestyle='None')
 ax2.tick_params(axis='y', colors='gray')
-ax2.set_ylabel('SO2 flux (' + unit2 + ')', color='gray')
-
-plt.title('All observations: daily mean (nobs>=' + str(minobs) + ')')
-# save plot
-image = os.path.join(plotdir, 'mdoas.daymean' + str(minobs) + '.png')
+ax2.set_ylabel('SO2 flux ('+unit2+')', color = 'gray')
+if (tzone=='nzst'):
+  plt.title('All observations: daily(NZST) mean (nobs>='+str(minobs)+')')
+else:
+  plt.title('All observations: daily(UT) mean (nobs>='+str(minobs)+')')
+#save plot
+image = os.path.join(plotdir, 'daymean'+str(minobs)+'.png')
 plt.savefig(image, dpi=200)
