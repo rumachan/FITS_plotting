@@ -128,5 +128,5 @@ if (tzone=='nzst'):
 else:
   plt.title('All observations: daily(UT) mean (nobs>='+str(minobs)+')')
 #save plot
-image = os.path.join(plotdir, 'daymean'+str(minobs)+'.png')
+image = os.path.join(plotdir, 'mdoas.daymean'+str(minobs)+'.png')
 plt.savefig(image, dpi=200)
