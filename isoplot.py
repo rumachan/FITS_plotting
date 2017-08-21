@@ -34,13 +34,12 @@ site2 = config.get('sites', 'site2')
 fig = plt.figure(figsize=(xsize, ysize))
 
 # site1
-siteID = site1.split()[0].split('.')[0]
-networkID = site1.split()[0].split('.')[1]
+siteID = site1.split()[0]
 typeID = site1.split()[1]
 
 # site1 meta data
 url = 'http://fits.geonet.org.nz/site'
-payload = {'siteID': siteID, 'networkID': networkID}
+payload = {'siteID': siteID}
 r = requests.get(url, params=payload)
 jdata = r.json()
 sitename = jdata.values()[1][0]['properties']['name'].encode('ascii', 'ignore')
@@ -48,12 +47,12 @@ sitename = jdata.values()[1][0]['properties']['name'].encode('ascii', 'ignore')
 # time series data and plot
 ax = fig.add_subplot(1, 2, 1)
 url = 'https://fits.geonet.org.nz/observation?typeID=' + \
-    typeID + '&siteID=' + siteID + '&networkID=' + networkID
+    typeID + '&siteID=' + siteID
 dfo = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 # meta data for lat observation
 url = 'http://fits.geonet.org.nz/observation/stats'
-payload = {'typeID': typeID, 'siteID': siteID, 'networkID': networkID}
+payload = {'typeID': typeID, 'siteID': siteID}
 r = requests.get(url, params=payload)
 jdata = r.json()
 last = jdata.get('Last').get('DateTime').encode('ascii', 'ignore')
@@ -62,7 +61,7 @@ strlast = dtlast.strftime("%Y-%m-%d")
 # site1 2nd data set
 typeID = site1.split()[2]
 url = 'https://fits.geonet.org.nz/observation?typeID=' + \
-    typeID + '&siteID=' + siteID + '&networkID=' + networkID
+    typeID + '&siteID=' + siteID
 dfh = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 
@@ -84,39 +83,38 @@ plt.legend(loc='upper left', scatterpoints=1)
 plt.title(title)
 
 # site2
-siteID = site2.split()[0].split('.')[0]
-networkID = site2.split()[0].split('.')[1]
+siteID = site2.split()[0]
 typeID = site2.split()[1]
 
 ax = fig.add_subplot(1, 2, 2)
 # site meta data
 url = 'http://fits.geonet.org.nz/site'
-payload = {'siteID': siteID, 'networkID': networkID}
+payload = {'siteID': siteID}
 r = requests.get(url, params=payload)
 jdata = r.json()
 sitename = jdata.values()[1][0]['properties']['name'].encode('ascii', 'ignore')
 
 # time series data and plot
 url = 'https://fits.geonet.org.nz/observation?typeID=' + \
-    typeID + '&siteID=' + siteID + '&networkID=' + networkID
+    typeID + '&siteID=' + siteID
 dfo = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 # meta data for lat observation
 url = 'http://fits.geonet.org.nz/observation/stats'
-payload = {'typeID': typeID, 'siteID': siteID, 'networkID': networkID}
+payload = {'typeID': typeID, 'siteID': siteID}
 r = requests.get(url, params=payload)
 jdata = r.json()
 last = jdata.get('Last').get('DateTime').encode('ascii', 'ignore')
 dtlast = parser.parse(last)
 strlast = dtlast.strftime("%Y-%m-%d")
 url = 'https://fits.geonet.org.nz/observation?typeID=' + \
-    typeID + '&siteID=' + siteID + '&networkID=' + networkID
+    typeID + '&siteID=' + siteID
 dfo = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 # site2 2nd data set
 typeID = site2.split()[2]
 url = 'https://fits.geonet.org.nz/observation?typeID=' + \
-    typeID + '&siteID=' + siteID + '&networkID=' + networkID
+    typeID + '&siteID=' + siteID
 dfh = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 # plot all data

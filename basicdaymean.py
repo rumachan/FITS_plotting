@@ -11,11 +11,10 @@ import requests
 
 
 def getsite(site):
-    siteID = site.split()[0].split('.')[0]
-    networkID = site.split()[0].split('.')[1]
+    siteID = site.split()[0]
     typeID = site.split()[1]
     methodID = site.split()[2]
-    return siteID, networkID, typeID, methodID
+    return siteID, typeID, methodID
 
 names = ['dt', 'obs', 'err']
 kgs2tpd = 86.4  # conversion kg/s to t/d
@@ -42,13 +41,13 @@ tzone = config.get('tzone', 'tzone')
 
 # sites
 site1 = config.get('sites', 'site1')
-(siteID1, networkID1, typeID1, methodID1) = getsite(site1)
+(siteID1, typeID1, methodID1) = getsite(site1)
 site2 = config.get('sites', 'site2')
-(siteID2, networkID2, typeID2, methodID2) = getsite(site2)
+(siteID2, typeID2, methodID2) = getsite(site2)
 site3 = config.get('sites', 'site3')
-(siteID3, networkID3, typeID3, methodID3) = getsite(site3)
+(siteID3, typeID3, methodID3) = getsite(site3)
 site4 = config.get('sites', 'site4')
-(siteID4, networkID4, typeID4, methodID4) = getsite(site4)
+(siteID4, typeID4, methodID4) = getsite(site4)
 
 unit = 'kg/s'
 unit2 = 't/d'
@@ -62,25 +61,25 @@ id, day = days[0]
 # site1
 url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID1 + '&methodID=' + \
     methodID1 + '&siteID=' + siteID1 + \
-    '&networkID=' + networkID1 + '&days=' + day
+    '&days=' + day
 df1 = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 # site2
 url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID2 + '&methodID=' + \
     methodID2 + '&siteID=' + siteID2 + \
-    '&networkID=' + networkID2 + '&days=' + day
+    '&days=' + day
 df2 = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 # site3
 url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID3 + '&methodID=' + \
     methodID3 + '&siteID=' + siteID3 + \
-    '&networkID=' + networkID3 + '&days=' + day
+    '&days=' + day
 df3 = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 # site4
 url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID4 + '&methodID=' + \
     methodID4 + '&siteID=' + siteID4 + \
-    '&networkID=' + networkID4 + '&days=' + day
+    '&days=' + day
 df4 = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 

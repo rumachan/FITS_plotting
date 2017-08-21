@@ -12,24 +12,22 @@ import requests
 
 
 def getsite(site):
-    siteID = site[1].split()[0].split('.')[0]
-    networkID = site[1].split()[0].split('.')[1]
+    siteID = site[1].split()[0]
     typeID = site[1].split()[1]
     methodID = site[1].split()[2]
-    return siteID, networkID, typeID, methodID
+    return siteID, typeID, methodID
 
 
 def getsitesingle(site):
-    siteID = site.split()[0].split('.')[0]
-    networkID = site.split()[0].split('.')[1]
+    siteID = site.split()[0]
     typeID = site.split()[1]
     methodID = site.split()[2]
-    return siteID, networkID, typeID, methodID
+    return siteID, typeID, methodID
 
 
-def getsitename(site, network):
+def getsitename(site):
     url = 'http://fits.geonet.org.nz/site'
-    payload = {'siteID': site, 'networkID': network}
+    payload = {'siteID': site}
     r = requests.get(url, params=payload)
     # get from a dictionary
     jdata = r.json()
@@ -71,11 +69,11 @@ for nday, day in days:
     print '***temperature***'
     ax1 = fig.add_subplot(nplots, 1, 1)
     temp1 = config.get('temps', 'temp1')
-    (siteID, networkID, typeID, methodID) = getsitesingle(temp1)
-    print siteID, networkID, typeID, methodID
-    sitename = getsitename(siteID, networkID)
+    (siteID, typeID, methodID) = getsitesingle(temp1)
+    print siteID, typeID, methodID
+    sitename = getsitename(siteID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
@@ -83,11 +81,11 @@ for nday, day in days:
              color='red', linewidth=2, label=sitename)
 
     temp2 = config.get('temps', 'temp2')
-    (siteID, networkID, typeID, methodID) = getsitesingle(temp2)
-    print siteID, networkID, typeID, methodID
-    sitename = getsitename(siteID, networkID)
+    (siteID, typeID, methodID) = getsitesingle(temp2)
+    print siteID, typeID, methodID
+    sitename = getsitename(siteID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
@@ -95,11 +93,11 @@ for nday, day in days:
              color='green', linewidth=2, label=sitename)
 
     temp3 = config.get('temps', 'temp3')
-    (siteID, networkID, typeID, methodID) = getsitesingle(temp3)
-    print siteID, networkID, typeID, methodID
-    sitename = getsitename(siteID, networkID)
+    (siteID, typeID, methodID) = getsitesingle(temp3)
+    print siteID, typeID, methodID
+    sitename = getsitename(siteID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
@@ -114,10 +112,10 @@ for nday, day in days:
     print '***TDS***'
     ax2 = fig.add_subplot(nplots, 1, 2, sharex=ax1)
     for (n, water) in enumerate(waterdata):
-        (siteID, networkID, typeID, methodID) = getsite(water)
-        print n, siteID, networkID, typeID, methodID
+        (siteID, typeID, methodID) = getsite(water)
+        print n, siteID, typeID, methodID
         url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-            siteID + '&networkID=' + networkID + \
+            siteID + \
             '&methodID=' + methodID + '&days=' + day
         if (n == 0):
             dftds = pd.read_csv(
@@ -138,18 +136,18 @@ for nday, day in days:
     # alternate y-axis
     ax2a = ax2.twinx()
     mg = config.get('mgcl', 'mg')
-    (siteID, networkID, typeID, methodID) = getsitesingle(mg)
-    print siteID, networkID, typeID, methodID
+    (siteID, typeID, methodID) = getsitesingle(mg)
+    print siteID, typeID, methodID
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     dfmg = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
     cl = config.get('mgcl', 'cl')
-    (siteID, networkID, typeID, methodID) = getsitesingle(cl)
-    print siteID, networkID, typeID, methodID
+    (siteID, typeID, methodID) = getsitesingle(cl)
+    print siteID, typeID, methodID
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     dfcl = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
@@ -171,10 +169,10 @@ for nday, day in days:
     print '***gas flux***'
     ax3 = fig.add_subplot(nplots, 1, 3, sharex=ax1)
     gas1 = config.get('gases', 'gas1')
-    (siteID, networkID, typeID, methodID) = getsitesingle(gas1)
-    print siteID, networkID, typeID, methodID
+    (siteID, typeID, methodID) = getsitesingle(gas1)
+    print siteID, typeID, methodID
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
@@ -182,10 +180,10 @@ for nday, day in days:
              color='red', linewidth=2, label=typeID + ' ' + methodID)
 
     gas2 = config.get('gases', 'gas2')
-    (siteID, networkID, typeID, methodID) = getsitesingle(gas2)
-    print siteID, networkID, typeID, methodID
+    (siteID, typeID, methodID) = getsitesingle(gas2)
+    print siteID, typeID, methodID
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
@@ -194,17 +192,17 @@ for nday, day in days:
 
     # flyspec, returns no data
     #gas3 = config.get('gases', 'gas3')
-    #(siteID, networkID, typeID, methodID) = getsitesingle(gas3)
-    # print siteID, networkID, typeID, methodID
-    #url= 'https://fits.geonet.org.nz/observation?typeID='+typeID+'&siteID='+siteID+'&networkID='+networkID+'&methodID='+methodID+'&days='+day
+    #(siteID, typeID, methodID) = getsitesingle(gas3)
+    # print siteID, typeID, methodID
+    #url= 'https://fits.geonet.org.nz/observation?typeID='+typeID+'&siteID='+siteID+'&methodID='+methodID+'&days='+day
     #df = pd.read_csv(url, names=names, skiprows=1, parse_dates={"Datetime" : ['dt']})
     #plt.plot(df['Datetime'], df['obs'], marker='v', markersize=10, color = 'red', linewidth = 2, label = typeID+' '+methodID)
 
     gas4 = config.get('gases', 'gas4')
-    (siteID, networkID, typeID, methodID) = getsitesingle(gas4)
-    print siteID, networkID, typeID, methodID
+    (siteID, typeID, methodID) = getsitesingle(gas4)
+    print siteID, typeID, methodID
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
@@ -212,10 +210,10 @@ for nday, day in days:
              color='green', linewidth=2, label=typeID + ' ' + methodID)
 
     gas5 = config.get('gases', 'gas5')
-    (siteID, networkID, typeID, methodID) = getsitesingle(gas5)
-    print siteID, networkID, typeID, methodID
+    (siteID, typeID, methodID) = getsitesingle(gas5)
+    print siteID, typeID, methodID
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
@@ -241,28 +239,28 @@ for nday, day in days:
     ax4 = fig.add_subplot(nplots, 1, 4, sharex=ax1)
 
     so2cosp = config.get('molar', 'so2cosp')
-    (siteID, networkID, typeID, methodID) = getsitesingle(so2cosp)
-    print siteID, networkID, typeID, methodID
+    (siteID, typeID, methodID) = getsitesingle(so2cosp)
+    print siteID, typeID, methodID
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     dfso2cosp = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 
     so2cont = config.get('molar', 'so2cont')
-    (siteID, networkID, typeID, methodID) = getsitesingle(so2cont)
-    print siteID, networkID, typeID, methodID
+    (siteID, typeID, methodID) = getsitesingle(so2cont)
+    print siteID, typeID, methodID
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     dfso2cont = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 
     co2cont = config.get('molar', 'co2cont')
-    (siteID, networkID, typeID, methodID) = getsitesingle(co2cont)
-    print siteID, networkID, typeID, methodID
+    (siteID, typeID, methodID) = getsitesingle(co2cont)
+    print siteID, typeID, methodID
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
-        siteID + '&networkID=' + networkID + \
+        siteID + \
         '&methodID=' + methodID + '&days=' + day
     dfco2cont = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})

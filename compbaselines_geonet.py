@@ -77,16 +77,14 @@ for reg in regions:
         for idx, line in enumerate(lines):
             site1 = line[1].split()[0]
             site2 = line[1].split()[1]
-            siteid1 = site1.split('.')[0]
-            netid1 = site1.split('.')[1]
-            siteid2 = site2.split('.')[0]
-            netid2 = site2.split('.')[1]
-            print '  plot = ', idx + 1, siteid1, netid1, siteid2, netid2
+            siteid1 = site1
+            siteid2 = site2
+            print '  plot = ', idx + 1, siteid1, siteid2
 
             # get position data for sites, FITS query
             # first site
             url = 'http://fits.geonet.org.nz/site'
-            payload = {'siteID': siteid1, 'networkID': netid1}
+            payload = {'siteID': siteid1}
             r = requests.get(url, params=payload)
             # get from a dictionary
             jdata = r.json()
@@ -104,7 +102,7 @@ for reg in regions:
             pos_z1 = pos_z
             # second site
             url = 'http://fits.geonet.org.nz/site'
-            payload = {'siteID': siteid2, 'networkID': netid2}
+            payload = {'siteID': siteid2}
             r = requests.get(url, params=payload)
             # get from a dictionary
             jdata = r.json()
@@ -129,28 +127,28 @@ for reg in regions:
             names = ['dt', 'obs', 'err']
             # first site
             url = 'http://fits.geonet.org.nz/observation?typeID=e&siteID=' + \
-                siteid1 + '&networkID=' + netid1 + '&days=' + day
+                siteid1 + '&days=' + day
             df1e = pd.read_csv(
                 url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
             url = 'http://fits.geonet.org.nz/observation?typeID=n&siteID=' + \
-                siteid1 + '&networkID=' + netid1 + '&days=' + day
+                siteid1 + '&days=' + day
             df1n = pd.read_csv(
                 url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
             url = 'http://fits.geonet.org.nz/observation?typeID=u&siteID=' + \
-                siteid1 + '&networkID=' + netid1 + '&days=' + day
+                siteid1 + '&days=' + day
             df1u = pd.read_csv(
                 url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
             # second site
             url = 'http://fits.geonet.org.nz/observation?typeID=e&siteID=' + \
-                siteid2 + '&networkID=' + netid2 + '&days=' + day
+                siteid2 + '&days=' + day
             df2e = pd.read_csv(
                 url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
             url = 'http://fits.geonet.org.nz/observation?typeID=n&siteID=' + \
-                siteid2 + '&networkID=' + netid2 + '&days=' + day
+                siteid2 + '&days=' + day
             df2n = pd.read_csv(
                 url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
             url = 'http://fits.geonet.org.nz/observation?typeID=u&siteID=' + \
-                siteid2 + '&networkID=' + netid2 + '&days=' + day
+                siteid2 + '&days=' + day
             df2u = pd.read_csv(
                 url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 
