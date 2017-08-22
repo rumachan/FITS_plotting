@@ -14,6 +14,9 @@ RUN apt-get update \
     wget \
  && apt-get clean
 
+# Init mpl fonts
+RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot"
+
 # Install Tini
 RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini && \
     echo "1361527f39190a7338a0b434bd8c88ff7233ce7b9a4876f3315c22fce7eca1b0 *tini" | sha256sum -c - && \
@@ -26,15 +29,11 @@ RUN pip install -U pip && pip install -U pandas
 # Configure container startup
 ENTRYPOINT ["tini", "--"]
 
-RUN groupadd -g 1260 -r volcano && useradd -m -s /bin/bash -r -g volcano -u 1260 volcano
-ENV PATH /home/volcano/scripts:$PATH
 
-USER volcano
-WORKDIR /home/volcano
-RUN mkdir /home/volcano/scripts
+VOLUME ["/output"]
+VOLUME ["/workdir"]
+WORKDIR /usr/local/bin
+COPY *.py /usr/local/bin/
+COPY *.cfg /usr/local/bin/
+COPY *.sh /usr/local/bin/
 
-VOLUME ["/home/volcano/output"]
-VOLUME ["/home/volcano/workdir"]
-COPY *.py /home/volcano/scripts/
-COPY *.cfg /home/volcano/scripts/
-COPY *.sh /home/volcano/scripts/

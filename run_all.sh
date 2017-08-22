@@ -5,16 +5,16 @@
 # 03/17 Y. Behr <y.behr@gns.cri.nz> #
 #####################################
 
-basicdaymean.py scripts/basicdaymean.cfg
+basicdaymean.py basicdaymean.cfg
 
-combiplot.py scripts/combiplot.cfg
+combiplot.py combiplot.cfg
 
-compbaselines_geonet.py scripts/compbaselines.cfg
+compbaselines_geonet.py compbaselines.cfg
 
-cumsum.py scripts/cumsum.cfg
+cumsum.py cumsum.cfg
 
-isoplot.py scripts/isoplot.cfg
+isoplot.py isoplot.cfg
 
-mdoasplot.py scripts/mdoasplot.cfg
+mdoasplot.py mdoasplot.cfg
 
-ruapcombi.py scripts/ruapcombi.cfg
+ruapcombi.py ruapcombi.cfg
