@@ -1,45 +1,46 @@
 #!/usr/bin/env python
-import sys, os
+import matplotlib
+matplotlib.use('Agg')
+import sys
+import os
 import ConfigParser
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import requests
-from subprocess import call
 
 names = ['dt', 'obs', 'err']
-kgs2tpd = 86.4	#conversion kg/s to t/d
+kgs2tpd = 86.4  # conversion kg/s to t/d
 
-#configuration file
+# configuration file
 if (len(sys.argv) != 2):
-  sys.exit('syntax mdoasplot.py config_file')
+    sys.exit('syntax mdoasplot.py config_file')
 else:
-  cfg = sys.argv[1]
+    cfg = sys.argv[1]
 
-#parse configuration file
+# parse configuration file
 config = ConfigParser.ConfigParser()
 config.read(cfg)
-webserver = config.get('web','server')
-webuser = config.get('web','user')
-webdir = config.get('web','dir')
-xsize = float(config.get('plot','xsize'))
-ysize = float(config.get('plot','ysize'))
-ymax = float(config.get('plot','ymax'))
-plotdir = config.get('plot','dir')
+webserver = config.get('web', 'server')
+webuser = config.get('web', 'user')
+webdir = config.get('web', 'dir')
+xsize = float(config.get('plot', 'xsize'))
+ysize = float(config.get('plot', 'ysize'))
+ymax = float(config.get('plot', 'ymax'))
+plotdir = config.get('plot', 'dir')
 days = config.items('days')
 sites = config.items('sites')
 
-#loop through sites
+# loop through sites
 for site in sites:
-  siteid = site[1].split()[0].split('.')[0]
-  networkid = site[1].split()[0].split('.')[1]
+  siteid = site[1].split()[0]
   typeid = site[1].split()[1]
   methodid = site[1].split()[2]
-  print siteid, networkid, typeid, methodid
+  print siteid, typeid, methodid
 
   #sitename meta data
   url = 'http://fits.geonet.org.nz/site'
-  payload = {'siteID': siteid, 'networkID': networkid}
+  payload = {'siteID': siteid}
   r = requests.get(url,params=payload)
   #get from a dictionary
   jdata = r.json()
@@ -56,7 +57,7 @@ for site in sites:
 
   #loop through plot durations
   for id, day in days:
-    url= 'https://fits.geonet.org.nz/observation?typeID='+typeid+'&methodID='+methodid+'&siteID='+siteid+'&networkID='+networkid+'&days='+day
+    url= 'https://fits.geonet.org.nz/observation?typeID='+typeid+'&methodID='+methodid+'&siteID='+siteid+'&days='+day
     df = pd.read_csv(url, names=names, skiprows=1, parse_dates={"Datetime" : ['dt']})
     if (len(df.index)>0): 	#check df does not have zero rows
 
@@ -97,10 +98,10 @@ for site in sites:
 
       #save plot
       if day == '365000':  #all data
-        image = os.path.join(plotdir, siteid+'.'+networkid+'_'+typeid+'_'+methodid+'.png')
+        image = os.path.join(plotdir, siteid+'_'+typeid+'_'+methodid+'.png')
       else:
-        image = os.path.join(plotdir, siteid+'.'+networkid+'_'+typeid+'_'+methodid+'_'+day+'.png')
+        image = os.path.join(plotdir, siteid+'_'+typeid+'_'+methodid+'_'+day+'.png')
       #print '  image file = ', image
       plt.savefig(image, dpi=200)
-      cmdstr = '/usr/bin/scp '+ image + ' ' +webuser +'@' + webserver + ':' + webdir
-      call(cmdstr, shell=True)
+      #cmdstr = '/usr/bin/scp '+ image + ' ' +webuser +'@' + webserver + ':' + webdir
+      #call(cmdstr, shell=True)
