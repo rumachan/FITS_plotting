@@ -35,14 +35,12 @@ shift
 done
 
 if [ "${RUNONLY}" == "false" ]; then
-    docker stop fitsplots
-    docker rm fitsplots
     docker rmi yadabe/fitsplots
     docker build --no-cache=true -t yadabe/fitsplots .
 fi
 
 if [ "${BUILDONLY}" == "false" ] ;then
-    docker run --name fitsplots -v html:/output -v rsam:/workdir yadabe/fitsplots run_all.sh
+    docker run --rm -v html:/output -v rsam:/workdir yadabe/fitsplots run_all.sh
 fi
 
 
