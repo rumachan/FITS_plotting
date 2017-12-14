@@ -9,10 +9,10 @@ RUN apt-get update \
        ca-certificates \
     && apt-get clean
 
-# Install conda as jovyan and check the md5 sum provided on the download site
+# Install conda and check the md5 sum provided on the download site
 ENV MINICONDA_VERSION 4.3.30 
 ENV CONDA_DIR /opt/conda
-ENV PATH=$CONDA_DIR/bin:$PATH
+ENV PATH=$CONDA_DIR/envs/python2/bin:$CONDA_DIR/bin:$PATH
 
 RUN cd /tmp && \
     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
@@ -33,11 +33,6 @@ RUN conda create --quiet --yes -p $CONDA_DIR/envs/python2 python=2.7 \
     'pyproj=1.9*' \
     'pandas=0.19*' && \
     conda clean -tipsy
-
-
-# Set default python installation to python2
-RUN rm $CONDA_DIR/bin/python && \
-    ln -s $CONDA_DIR/envs/python2/bin/python $CONDA_DIR/bin/python
 
 # Init mpl fonts
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot"
