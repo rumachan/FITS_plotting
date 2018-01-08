@@ -90,7 +90,7 @@ for nday, day in days:
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
     plt.plot(df['Datetime'], df['obs'], marker='o', markersize=10,
-             color='green', linewidth=2, label=sitename)
+             color='green', linewidth=2, linestyle='dotted', label=sitename)
 
     temp3 = config.get('temps', 'temp3')
     (siteID, typeID, methodID) = getsitesingle(temp3)
@@ -102,7 +102,7 @@ for nday, day in days:
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
     plt.plot(df['Datetime'], df['obs'], marker='o', markersize=10,
-             color='blue', linewidth=2, label=sitename)
+             color='blue', linewidth=2, linestyle='dotted', label=sitename)
     ax1.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
     plt.ylabel('temperature (deg C)')
     plt.legend(loc='best', fontsize=10)
@@ -126,7 +126,7 @@ for nday, day in days:
             dftds['obs'] = dftds['obs'] + df['obs']
 
     ax2.plot(dftds['Datetime'], dftds['obs'], marker='o',
-             markersize=10, color='red', linewidth=2, label='TDS')
+             markersize=10, color='red', linewidth=2, linestyle='dotted', label='TDS')
     ax2.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
     plt.ylabel('total dissolved solids-TDS (mg/L)')
     ax2.legend(loc='best', fontsize=10)
@@ -159,7 +159,7 @@ for nday, day in days:
     dfmgcl = mg['obs'] / cl['obs']
     dfmgcl[np.isinf(dfmgcl)] = np.nan
     ax2a.plot(mg['Datetime'], dfmgcl, marker='o', markersize=10,
-              color='blue', linewidth=2, label='Mg/Cl')
+              color='blue', linewidth=2, linestyle='dotted', label='Mg/Cl')
     ax2a.tick_params(axis='y', colors='blue')
     ax2a.set_ylabel('Mg/Cl ratio', color='blue')
 
@@ -168,6 +168,8 @@ for nday, day in days:
     #***airborne gas flux***
     print '***gas flux***'
     ax3 = fig.add_subplot(nplots, 1, 3, sharex=ax1)
+
+    #gas1
     gas1 = config.get('gases', 'gas1')
     (siteID, typeID, methodID) = getsitesingle(gas1)
     print siteID, typeID, methodID
@@ -176,9 +178,10 @@ for nday, day in days:
         '&methodID=' + methodID + '&days=' + day
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
-    plt.plot(df['Datetime'], df['obs'], marker='o', markersize=10,
-             color='red', linewidth=2, label=typeID + ' ' + methodID)
+    ax3.plot(df['Datetime'], df['obs']*kgs2tpd, marker='o', markersize=10,
+             color='red', linewidth=2, linestyle='dotted', label=typeID + ' ' + methodID)
 
+    #gas2
     gas2 = config.get('gases', 'gas2')
     (siteID, typeID, methodID) = getsitesingle(gas2)
     print siteID, typeID, methodID
@@ -187,17 +190,27 @@ for nday, day in days:
         '&methodID=' + methodID + '&days=' + day
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
-    plt.plot(df['Datetime'], df['obs'], marker='^', markersize=10,
-             color='red', linewidth=2, label=typeID + ' ' + methodID)
+    ax3.plot(df['Datetime'], df['obs']*kgs2tpd, marker='^', markersize=10,
+             color='red', linewidth=2, linestyle='dotted', label=typeID + ' ' + methodID)
 
     # flyspec, returns no data
+    #gas3
     #gas3 = config.get('gases', 'gas3')
     #(siteID, typeID, methodID) = getsitesingle(gas3)
     # print siteID, typeID, methodID
     #url= 'https://fits.geonet.org.nz/observation?typeID='+typeID+'&siteID='+siteID+'&methodID='+methodID+'&days='+day
     #df = pd.read_csv(url, names=names, skiprows=1, parse_dates={"Datetime" : ['dt']})
-    #plt.plot(df['Datetime'], df['obs'], marker='v', markersize=10, color = 'red', linewidth = 2, label = typeID+' '+methodID)
+    #ax3.plot(df['Datetime'], df['obs'], marker='v', markersize=10, color = 'red', linewidth = 2, linestyle='dotted', label = typeID+' '+methodID)
 
+    # alternate y-axis for CO2 flux, as values are much higher
+    ax3a = ax3.twinx()
+    y1 = 0
+    y2 = 2500
+    ax3a.set_ylim(y1, y2)
+    ax3a.tick_params(axis='y', colors='green')
+    ax3a.set_ylabel('CO2 gas flux (t/d)', color='green')
+
+   #gas4
     gas4 = config.get('gases', 'gas4')
     (siteID, typeID, methodID) = getsitesingle(gas4)
     print siteID, typeID, methodID
@@ -206,9 +219,12 @@ for nday, day in days:
         '&methodID=' + methodID + '&days=' + day
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
-    plt.plot(df['Datetime'], df['obs'], marker='o', markersize=10,
-             color='green', linewidth=2, label=typeID + ' ' + methodID)
+    ax3a.plot(df['Datetime'], df['obs']*kgs2tpd, marker='o', markersize=10,
+             color='green', linewidth=2, linestyle='dotted', label=typeID + ' ' + methodID)
+    ax3a.legend(loc='best', fontsize=10)
+    ax3a.grid(b=True, which='major', color='green', linestyle='--', alpha=0.5)
 
+    #gas5
     gas5 = config.get('gases', 'gas5')
     (siteID, typeID, methodID) = getsitesingle(gas5)
     print siteID, typeID, methodID
@@ -218,21 +234,20 @@ for nday, day in days:
     df = pd.read_csv(
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
     # H2S very small, x 100 for plotting
-    df['obs'] = df['obs'] * 100
-    plt.plot(df['Datetime'], df['obs'], marker='o', markersize=10,
-             color='blue', linewidth=2, label=typeID + ' ' + methodID + ' x 100')
+    ax3.plot(df['Datetime'], df['obs']*kgs2tpd*100, marker='o', markersize=10,
+             color='blue', linewidth=2, linestyle='dotted', label=typeID + ' ' + methodID + ' x 100')
     ax3.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
-    plt.ylabel('gas flux (kg/s)')
-    plt.legend(loc='best', fontsize=10)
+    ax3.set_ylabel('gas flux (kg/s)')
+    ax3.legend(loc='best', fontsize=10)
     # alternate y-axis
-    ax3a = ax3.twinx()
-    y1, y2 = ax3.get_ylim()
-    ax3a.set_ylim(y1 * kgs2tpd, y2 * kgs2tpd)
-    dftpd = df['obs'] * kgs2tpd
-    ax3a.plot(df['Datetime'], dftpd, marker='o',
-              markersize=10, color='blue', linewidth=2)
-    ax3a.tick_params(axis='y', colors='gray')
-    ax3a.set_ylabel('gas flux (t/d)', color='gray')
+    #ax3a = ax3.twinx()
+    #y1, y2 = ax3.get_ylim()
+    #ax3a.set_ylim(y1 * kgs2tpd, y2 * kgs2tpd)
+    #dftpd = df['obs'] * kgs2tpd
+    #ax3a.plot(df['Datetime'], dftpd, marker='o',
+    #          markersize=10, color='blue', linewidth=2)
+    #ax3a.tick_params(axis='y', colors='gray')
+    #ax3a.set_ylabel('gas flux (t/d)', color='gray')
 
     #***molar ratio, CO2/SO2***
     print '***molar ratio***'
@@ -273,7 +288,7 @@ for nday, day in days:
     dfratcosp = co2cont['obs'] / so2cosp['obs'] * molrat
     dfratcosp[np.isinf(dfratcosp)] = np.nan
     plt.plot(so2cosp['Datetime'], dfratcosp, marker='o',
-             markersize=10, color='red', linewidth=2, label='CO2/SO2-cosp')
+             markersize=10, color='red', linewidth=2, linestyle='dotted', label='CO2/SO2-cosp')
 
     co2cont = dfco2cont[dfco2cont.Datetime.isin(dfso2cont.Datetime)]
     so2cont = dfso2cont[dfso2cont.Datetime.isin(dfco2cont.Datetime)]
@@ -282,7 +297,7 @@ for nday, day in days:
     dfratcont = co2cont['obs'] / so2cont['obs'] * molrat
     dfratcont[np.isinf(dfratcont)] = np.nan
     plt.plot(so2cont['Datetime'], dfratcont, marker='o',
-             markersize=10, color='blue', linewidth=2, label='CO2/SO2-cont')
+             markersize=10, color='blue', linewidth=2, linestyle='dotted', label='CO2/SO2-cont')
     ax4.set_ylim(0, csratmax)
     ax4.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
     plt.ylabel('molar ratio')
