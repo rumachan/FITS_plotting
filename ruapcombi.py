@@ -40,7 +40,7 @@ names = ['dt', 'obs', 'err']
 kgs2tpd = 86.4  # conversion kg/s to t/d
 molrat = 1.4545
 csratmax = 200
-nplots = 5
+nplots = 6
 
 # configuration file
 if (len(sys.argv) != 2):
@@ -59,6 +59,7 @@ ysize = float(config.get('plot', 'ysize'))
 plotdir = config.get('plot', 'dir')
 days = config.items('days')
 waterdata = config.items('waterdata')
+analytes = config.items('analytes')
 
 # loop through water sites, download and plot
 for nday, day in days:
@@ -165,9 +166,22 @@ for nday, day in days:
 
     ax2a.legend(loc='lower right', fontsize=10)
 
+    #***analytes***
+    print '***analytes***'
+    axana = fig.add_subplot(nplots, 1, 3, sharex = ax1)
+    for (n, analyte) in enumerate(analytes):
+        (siteID, typeID, methodID) = getsite(analyte)
+        print n, siteID, typeID, methodID
+        url= 'https://fits.geonet.org.nz/observation?typeID='+typeID+'&siteID='+siteID+'&methodID='+methodID+'&days='+day
+        df = pd.read_csv(url, names=names, skiprows=1, parse_dates={"Datetime" : ['dt']})
+        axana.plot(df['Datetime'], df['obs'], marker='o', markersize=10, linewidth = 2, linestyle=':', label = typeID) 
+    axana.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
+    plt.ylabel('analyte concentration (mg/L)')
+    axana.legend(loc = 'best', fontsize = 10)
+
     #***airborne gas flux***
     print '***gas flux***'
-    ax3 = fig.add_subplot(nplots, 1, 3, sharex=ax1)
+    ax3 = fig.add_subplot(nplots, 1, 4, sharex=ax1)
 
     #gas1
     gas1 = config.get('gases', 'gas1')
@@ -251,7 +265,7 @@ for nday, day in days:
 
     #***molar ratio, CO2/SO2***
     print '***molar ratio***'
-    ax4 = fig.add_subplot(nplots, 1, 4, sharex=ax1)
+    ax4 = fig.add_subplot(nplots, 1, 5, sharex=ax1)
 
     so2cosp = config.get('molar', 'so2cosp')
     (siteID, typeID, methodID) = getsitesingle(so2cosp)
@@ -305,7 +319,7 @@ for nday, day in days:
 
     #***RSAM***
     print '***rsam***'
-    ax5 = fig.add_subplot(nplots, 1, 5, sharex=ax1)
+    ax5 = fig.add_subplot(nplots, 1, 6, sharex=ax1)
 
     rsamnames = ['dt', 'obs']
     rsamfile = config.get('rsam', 'file')
