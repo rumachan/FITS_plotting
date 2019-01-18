@@ -131,7 +131,7 @@ plt.scatter(dfo['obs'][-1:], dfh['obs'][-1:], color='black',
 # label
 plt.xlabel('18O (per mil)')
 plt.ylabel('2H (per mil)')
-strlast = dfo['Datetime'][-2:-1].dt.strftime('%Y-%m-%d').min()
+#strlast = dfo['Datetime'][-2:-1].dt.strftime('%Y-%m-%d').min()
 plt.legend(loc='upper left', scatterpoints=1)
 title = (sitename + ' (' + siteID + ') : isotope data, last value: ' + strlast)
 plt.title(title)
