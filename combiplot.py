@@ -6,10 +6,20 @@ import os
 import ConfigParser
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib import gridspec
 import numpy as np
 import requests
 from subprocess import call
 
+def nameofsite(siteid):
+    url = 'http://fits.geonet.org.nz/site'
+    payload = {'siteID': siteid}
+    r = requests.get(url,params=payload)
+    #get from a dictionary
+    jdata = r.json()
+    jdict = jdata['features'][0]
+    sitename = jdict['properties']['name'].encode('ascii','ignore')
+    return sitename
 
 def getsite(site):
     siteID = site.split()[0]
@@ -82,7 +92,36 @@ for id, day in days:
     frames = [df1, df2, df3, df4]
     df = pd.concat(frames)
 
-    fig, ax1 = plt.subplots(figsize=(xsize, ysize))
+    df['tpd'] = df['obs'] * kgs2tpd
+
+    #calculate daily counts of observations
+    if (len(df1)>0):
+        df1count = df1['obs'].groupby(df1['Datetime'].dt.date).count()
+        df1count.index = pd.to_datetime(df1count.index)
+    else:
+        df1count = pd.DataFrame()
+
+    if (len(df2)>0):
+        df2count = df2['obs'].groupby(df2['Datetime'].dt.date).count()
+        df2count.index = pd.to_datetime(df2count.index)
+    else:
+        df2count = pd.DataFrame()
+
+    if (len(df3)>0):
+        df3count = df3['obs'].groupby(df3['Datetime'].dt.date).count()
+        df3count.index = pd.to_datetime(df3count.index)
+    else:
+        df3count = pd.DataFrame()
+
+    if (len(df4)>0):
+        df4count = df4['obs'].groupby(df4['Datetime'].dt.date).count()
+        df4count.index = pd.to_datetime(df4count.index)
+    else:
+        df4count = pd.DataFrame()
+
+    fig = plt.figure(figsize=(xsize, ysize))
+    gs = gridspec.GridSpec(2, 1, height_ratios=[2, 1])
+    ax1 = plt.subplot(gs[0])
 
     # sort by datetime and reindex
     df.sort_values('Datetime', inplace=True)
@@ -93,38 +132,69 @@ for id, day in days:
     dfcount.index = pd.to_datetime(dfcount.index)
 
     # min/max obs per day
-    dfmin = df['obs'].groupby(df['Datetime'].dt.date).min()
-    dfmax = df['obs'].groupby(df['Datetime'].dt.date).max()
+    dfmin = df['tpd'].groupby(df['Datetime'].dt.date).min()
+    dfmax = df['tpd'].groupby(df['Datetime'].dt.date).max()
     dfcount.index = pd.to_datetime(dfcount.index)
     ax1.bar(dfcount.index, dfmax - dfmin, bottom=dfmin, width=0.01,
             color='black', edgecolor='black', alpha=0.25, align='center', label='range')
 
-    # mean per day
-    dfmean = df['obs'].groupby(df['Datetime'].dt.date).mean()
-    ax1.plot(dfcount.index, dfmean, marker='o', markersize=3,
-             color='red', linestyle='None', label='mean')
-    # alternate y-axis
-    ax2 = ax1.twinx()
-    y1, y2 = ax1.get_ylim()
-    ax2.set_ylim(0, ymax * kgs2tpd)
-    dftpd = dfmean * kgs2tpd
-    ax2.plot(dfcount.index, dftpd, marker='o', markersize=3,
-             color='red', linestyle='None', label='mean')
+    # median per day
+    dfmedian = df['tpd'].groupby(df['Datetime'].dt.date).median()
+    ax1.plot(dfcount.index, dfmedian, marker='o', markersize=3,
+             color='red', linestyle='None', label='median')
 
     # 25th and 75th percentile
-    dfup = df['obs'].groupby(df['Datetime'].dt.date).quantile(0.75)
-    dflp = df['obs'].groupby(df['Datetime'].dt.date).quantile(0.25)
+    dfup = df['tpd'].groupby(df['Datetime'].dt.date).quantile(0.75)
+    dflp = df['tpd'].groupby(df['Datetime'].dt.date).quantile(0.25)
     ax1.bar(dfcount.index, dfup - dflp, bottom=dflp, width=0.1,
             color='blue', edgecolor='blue', align='center', label='25th/75th %')
 
     ax1.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
-    ax1.set_ylabel('SO2 flux (' + unit + ')')
-    ax2.set_ylabel('SO2 flux (' + unit2 + ')', color='gray')
-    ax2.tick_params(axis='y', colors='gray')
-    ax1.legend(loc='upper left')
+    ax1.set_ylabel('SO2 flux (' + unit2 + ')')
+    ax1.legend(loc='best', fontsize=8)
     ax1.set_ylim([0, ymax])
     plt.title('All observations')
-# save plot
+
+    #number of observations
+    ax2 = plt.subplot(gs[1])
+    #site1
+    sitename = nameofsite(siteID1)
+    label = sitename+', assumed height'
+    if len(df1count)>0:
+        if methodID1 == 'mdoas-ch':
+            ax2.plot(df1count, marker='o', markersize=3, color='red', linestyle='None', label=label)
+        else:
+            ax2.plot(df1count, marker='o', markersize=3, color='red', alpha=0.3, linestyle='None', label=label)
+    #site2
+    sitename = nameofsite(siteID2)
+    label = sitename+', calculated height'
+    if len(df2count)>0:
+        if methodID2 == 'mdoas-ch':
+            ax2.plot(df2count, marker='o', markersize=3, color='red', linestyle='None', label=label)
+        else:
+            ax2.plot(df2count, marker='o', markersize=3, color='red', alpha=0.3, linestyle='None', label=label)
+    #site3
+    sitename = nameofsite(siteID3)
+    label = sitename+', assumed height'
+    if len(df3count)>0:
+        if methodID3 == 'mdoas-ch':
+            ax2.plot(df3count, marker='o', markersize=3, color='blue', linestyle='None', label=label)
+        else:
+            ax2.plot(df3count, marker='o', markersize=3, color='blue', alpha=0.3, linestyle='None', label=label)
+    #site4
+    sitename = nameofsite(siteID4)
+    label = sitename+', calculated height'
+    if len(df4count)>0:
+        if methodID4 == 'mdoas-ch':
+            ax2.plot(df4count, marker='o', markersize=3, color='blue', linestyle='None', label=label)
+        else:
+            ax2.plot(df4count, marker='o', markersize=3, color='blue', alpha=0.3, linestyle='None', label=label)
+
+    ax2.legend(loc='best', fontsize=8)
+    ax2.set_ylabel('Numbers Obs')
+    ax2.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
+
+    # save plot
     if day == '365000':  # all data
         image = os.path.join(plotdir, 'mdoas.allobs.png')
     else:
