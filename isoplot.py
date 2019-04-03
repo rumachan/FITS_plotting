@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import matplotlib
 matplotlib.use('Agg')
 import pandas as pd
@@ -30,9 +31,6 @@ plotdir = config.get('plot', 'dir')
 site1 = config.get('sites', 'site1')
 site2 = config.get('sites', 'site2')
 
-# figure set up
-fig = plt.figure(figsize=(xsize, ysize))
-
 # site1
 siteID = site1.split()[0]
 typeID = site1.split()[1]
@@ -44,13 +42,16 @@ r = requests.get(url, params=payload)
 jdata = r.json()
 sitename = jdata.values()[1][0]['properties']['name'].encode('ascii', 'ignore')
 
+# figure set up
+fig = plt.figure(figsize=(xsize, ysize))
+
 # time series data and plot
-ax = fig.add_subplot(1, 2, 1)
-url = 'https://fits.geonet.org.nz/observation?typeID=' + \
-    typeID + '&siteID=' + siteID
+ax = fig.add_subplot(1, 1, 1)
+url = 'https://fits.geonet.org.nz/observation?typeID=' +     typeID + '&siteID=' + siteID
 dfo = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
-# meta data for lat observation
+
+# meta data for last observation
 url = 'http://fits.geonet.org.nz/observation/stats'
 payload = {'typeID': typeID, 'siteID': siteID}
 r = requests.get(url, params=payload)
@@ -58,48 +59,72 @@ jdata = r.json()
 last = jdata.get('Last').get('DateTime').encode('ascii', 'ignore')
 dtlast = parser.parse(last)
 strlast = dtlast.strftime("%Y-%m-%d")
+
 # site1 2nd data set
 typeID = site1.split()[2]
-url = 'https://fits.geonet.org.nz/observation?typeID=' + \
-    typeID + '&siteID=' + siteID
-dfh = pd.read_csv(
-    url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
+url = 'https://fits.geonet.org.nz/observation?typeID=' +     typeID + '&siteID=' + siteID
+dfh = pd.read_csv(url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
 
 # plot data for site1
-plt.scatter(dfo['obs'], dfh['obs'], marker='o',
-            color='black', label='all data')
+plt.scatter(dfo['obs'], dfh['obs'], marker='o', color='black', label='all obs')
 # plot recent data
-plt.plot(dfo['obs'][-5:], dfh['obs'][-5:], color='red', linewidth=2)
-plt.scatter(dfo['obs'][-5:], dfh['obs'][-5:],
-            color='red', s=100, label='recent data')
-plt.scatter(dfo['obs'][-1:], dfh['obs'][-1:], color='red', s=200)  # last
-plt.scatter(dfo['obs'][-1:], dfh['obs'][-1:], color='black',
-            s=200, marker='*', label='last data')  # last
+# plt.plot(dfo['obs'][-5:], dfh['obs'][-5:], color='red', linewidth=2, label='_nolegend_')
+# plt.scatter(dfo['obs'][-5:], dfh['obs'][-5:], color='red', s=100, label='recent data')
+plt.scatter(dfo['obs'][-1:], dfh['obs'][-1:], color='red', s=100, label='last obs')  # last
+# plt.scatter(dfo['obs'][-1:], dfh['obs'][-1:], color='black', s=200, marker='*', label='last obs')  # last
+#plot lmwl line
+lmwl = pd.read_csv('isotopes_supplementary/isoplot_lmwl_fit.csv')
+plt.plot(lmwl['delta18O'], lmwl['D'], color='black', label='LMWL', marker='None')
+#plot local sampled meteoric waters
+localmw = pd.read_csv('isotopes_supplementary/Rainwater_isotopes.csv')
+plt.plot(localmw['delta18O'], localmw['D'], color='green', label='local meteoric', marker='o', linestyle='None')
+#plot volcanic arc region
+volcarc = pd.read_csv('isotopes_supplementary/VolcanicArc_isotopes.csv')
+plt.plot(volcarc['delta18O'], volcarc['D'], color='red', marker='None', label='_nolegend_')
+#and label
+plt.text(9,-20,'volcanic arc',ha='center')
+#plot 'by eye' mixing line for these data, as developed by Agnes Mazot
+plt.plot([-9.7,9],[-62,-8], color='black', label='mixing line', marker='None', linestyle=':')
+
+
 # label
 plt.xlabel('18O (per mil)')
 plt.ylabel('2H (per mil)')
-title = (sitename + ' (' + siteID + ') : isotope data, last value: ' + strlast)
+
+#limits
+plt.xlim(-12,12)
+plt.ylim(-80,0)
+
+title = (sitename + ' (' + siteID + ') : isotope data, last observation: ' + strlast)
 plt.legend(loc='upper left', scatterpoints=1)
 plt.title(title)
+
+# save plot
+image = os.path.join(plotdir, 'ruapehu_isotope_'+siteID+'.png')
+plt.savefig(image, dpi=200)
+
 
 # site2
 siteID = site2.split()[0]
 typeID = site2.split()[1]
 
-ax = fig.add_subplot(1, 2, 2)
-# site meta data
+# site2 meta data
 url = 'http://fits.geonet.org.nz/site'
 payload = {'siteID': siteID}
 r = requests.get(url, params=payload)
 jdata = r.json()
 sitename = jdata.values()[1][0]['properties']['name'].encode('ascii', 'ignore')
 
+# figure set up
+fig = plt.figure(figsize=(xsize, ysize))
+
 # time series data and plot
-url = 'https://fits.geonet.org.nz/observation?typeID=' + \
-    typeID + '&siteID=' + siteID
+ax = fig.add_subplot(1, 1, 1)
+url = 'https://fits.geonet.org.nz/observation?typeID=' +     typeID + '&siteID=' + siteID
 dfo = pd.read_csv(
     url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
-# meta data for lat observation
+
+# meta data for last observation
 url = 'http://fits.geonet.org.nz/observation/stats'
 payload = {'typeID': typeID, 'siteID': siteID}
 r = requests.get(url, params=payload)
@@ -107,35 +132,47 @@ jdata = r.json()
 last = jdata.get('Last').get('DateTime').encode('ascii', 'ignore')
 dtlast = parser.parse(last)
 strlast = dtlast.strftime("%Y-%m-%d")
-url = 'https://fits.geonet.org.nz/observation?typeID=' + \
-    typeID + '&siteID=' + siteID
-dfo = pd.read_csv(
-    url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
+
 # site2 2nd data set
-typeID = site2.split()[2]
-url = 'https://fits.geonet.org.nz/observation?typeID=' + \
-    typeID + '&siteID=' + siteID
-dfh = pd.read_csv(
-    url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
-# plot all data
-plt.scatter(dfo['obs'], dfh['obs'], marker='o',
-            color='black', label='all data')
+typeID = site1.split()[2]
+url = 'https://fits.geonet.org.nz/observation?typeID=' +     typeID + '&siteID=' + siteID
+dfh = pd.read_csv(url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
+
+# plot data for site2
+plt.scatter(dfo['obs'], dfh['obs'], marker='o', color='black', label='all obs')
 # plot recent data
-plt.plot(dfo['obs'][-5:], dfh['obs'][-5:], color='red', linewidth=2)
-plt.scatter(dfo['obs'][-5:], dfh['obs'][-5:],
-            color='red', s=100, label='recent data')
-plt.scatter(dfo['obs'][-1:], dfh['obs'][-1:], color='red', s=200)  # last
-plt.scatter(dfo['obs'][-1:], dfh['obs'][-1:], color='black',
-            s=200, marker='*', label='last data')  # last
+# plt.plot(dfo['obs'][-5:], dfh['obs'][-5:], color='red', linewidth=2, label='_nolegend_')
+# plt.scatter(dfo['obs'][-5:], dfh['obs'][-5:], color='red', s=100, label='recent data')
+plt.scatter(dfo['obs'][-1:], dfh['obs'][-1:], color='red', s=100, label='last obs')  # last
+# plt.scatter(dfo['obs'][-1:], dfh['obs'][-1:], color='black', s=200, marker='*', label='last obs')  # last
+#plot lmwl line
+lmwl = pd.read_csv('isotopes_supplementary/isoplot_lmwl_fit.csv')
+plt.plot(lmwl['delta18O'], lmwl['D'], color='black', label='LMWL', marker='None')
+#plot local sampled meteoric waters
+localmw = pd.read_csv('isotopes_supplementary/Rainwater_isotopes.csv')
+plt.plot(localmw['delta18O'], localmw['D'], color='green', label='local meteoric', marker='o', linestyle='None')
+#plot volcanic arc region
+volcarc = pd.read_csv('isotopes_supplementary/VolcanicArc_isotopes.csv')
+plt.plot(volcarc['delta18O'], volcarc['D'], color='red', marker='None', label='_nolegend_')
+#and label
+plt.text(9,-20,'volcanic arc',ha='center')
+#plot 'by eye' mixing line for these data, as developed by Agnes Mazot
+plt.plot([-9.7,9],[-62,-8], color='black', label='mixing line', marker='None', linestyle=':')
+
 
 # label
 plt.xlabel('18O (per mil)')
 plt.ylabel('2H (per mil)')
-#strlast = dfo['Datetime'][-2:-1].dt.strftime('%Y-%m-%d').min()
+
+#limits
+plt.xlim(-12,12)
+plt.ylim(-80,0)
+
+title = (sitename + ' (' + siteID + ') : isotope data, last observation: ' + strlast)
 plt.legend(loc='upper left', scatterpoints=1)
-title = (sitename + ' (' + siteID + ') : isotope data, last value: ' + strlast)
 plt.title(title)
 
 # save plot
-image = os.path.join(plotdir, 'ruapehu_isotope.png')
+image = os.path.join(plotdir, 'ruapehu_isotope_'+siteID+'.png')
 plt.savefig(image, dpi=200)
+
