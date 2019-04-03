@@ -53,4 +53,4 @@ WORKDIR /usr/local/bin
 COPY *.py /usr/local/bin/
 COPY *.cfg /usr/local/bin/
 COPY *.sh /usr/local/bin/
-
+COPY isotopes_supplementary/ /usr/local/bin/isotopes_supplementary/
