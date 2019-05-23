@@ -10,6 +10,13 @@ _Relevant files_
 - basicdaymean.cfg
 ![GitHub Logo](/readme_images/mdoas.daymean5.png)
 
+### mdoasplot
+Plots a box and whisker diagram for White Island S02 mini-DOAS fluxes for each day. Days are UTC. This is currently no used, having being superseded by `combiplot`.
+- 
+
+### combiplot
+Plots a box and whisker diagram for White Island S02 mini-DOAS fluxes for each day, plus the number observations per day for each of the four data types. Days are UTC. The plots are made for different lengths of time (days). This superseded by `mdoasplot`.
+
 ## Docker
 
 To install and run the scripts in a docker image proceed as follows.
