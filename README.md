@@ -34,6 +34,22 @@ _Relevant files_
 - cumsum.cfg
 ![GitHub Logo](/readme_images/mdoas.allobs_resample_10d.png)
 
+### compbaselines
+Plots GNSS baselines for station pairs within a volcanic centre. Plots are made for different lengths of time (days). Plots within a volcanic centre are grouped together.
+
+_Relevant files_
+- compbaselines_geonet.py
+- compbaselines.cfg
+![GitHub Logo](/readme_images/gps.bll.taranaki_100.png)
+
+### ruapcombi
+Plot a combination of monitoring parameters from Ruapehu.
+
+_Relevant files_
+- ruapcombi.py
+- ruapcombi.cfg
+![GitHub Logo](/readme_images/ruap.combi_365.png)
+
 ## Docker
 
 To install and run the scripts in a docker image proceed as follows.
