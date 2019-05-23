@@ -50,6 +50,14 @@ _Relevant files_
 - ruapcombi.cfg
 ![GitHub Logo](/readme_images/ruapehu.combi_365.png)
 
+### isoplot
+Plot water isotope data as a cross-plot.
+
+_Relevant files_
+- 
+- 
+
+
 ## Docker
 
 To install and run the scripts in a docker image proceed as follows.
