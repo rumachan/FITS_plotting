@@ -5,6 +5,7 @@ Python plotting of volcano data from FITS
 
 ### basicdaymean
 Plots the mean of all White Island S02 mini-DOAS fluxes, provided there are at least 5 observations a day. A day is the NZST day. These values are those traditionally presented by volcano-geochemists at volcano monitoring meetings.
+
 _Relevant files_
 - basicdaymean.py
 - basicdaymean.cfg
@@ -12,12 +13,14 @@ _Relevant files_
 
 ### mdoasplot
 Plots a box and whisker diagram for White Island S02 mini-DOAS fluxes for each day. Days are UTC. This is currently no used, having being superseded by `combiplot`.
+
 _Relevant files_
 - mdoasplot.py
 - mdoasplot.cfg
 
 ### combiplot
 Plots a box and whisker diagram for White Island S02 mini-DOAS fluxes for each day, plus the number observations per day for each of the four data types. Days are UTC. The plots are made for different lengths of time (days). This superseded by `mdoasplot`.
+
 _Relevant files_
 - combiplot.py
 - combiplot.cfg
