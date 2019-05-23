@@ -26,6 +26,14 @@ _Relevant files_
 - combiplot.cfg
 ![GitHub Logo](/readme_images/mdoas.allobs_30.png)
 
+### cumsum
+Plots the 10-day mean of White Island S02 mini-DOAS fluxes and the cumulative sum of those data. The purpose is to show low-term, low-frequency variations and show periods of consistently higher or lower (than mean) fluxes.
+
+_Relevant files_
+- cumsum.py
+- cumsum.cfg
+![GitHub Logo](/readme_images/mdoas.allobs_resample_10d.png)
+
 ## Docker
 
 To install and run the scripts in a docker image proceed as follows.
