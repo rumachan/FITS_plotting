@@ -8,7 +8,7 @@ Plots the mean of all White Island S02 mini-DOAS fluxes, provided there are at l
 _Relevant files_
 - basicdaymean.py
 - basicdaymean.cfg
-
+![GitHub Logo](/readme_images/mdoas.daymean5.png)
 
 ## Docker
 
