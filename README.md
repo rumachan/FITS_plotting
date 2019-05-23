@@ -48,7 +48,7 @@ Plot a combination of monitoring parameters from Ruapehu.
 _Relevant files_
 - ruapcombi.py
 - ruapcombi.cfg
-![GitHub Logo](/readme_images/ruap.combi_365.png)
+![GitHub Logo](/readme_images/ruapehu.combi_365.png)
 
 ## Docker
 
