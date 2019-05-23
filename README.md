@@ -53,10 +53,6 @@ _Relevant files_
 ### isoplot
 Plot water isotope data as a cross-plot.
 
-_Relevant files_
-- 
-- 
-
 
 ## Docker
 
