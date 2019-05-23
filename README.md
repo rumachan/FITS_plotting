@@ -1,6 +1,15 @@
 # FITS_plotting
 Python plotting of volcano data from FITS
 
+## Contents
+
+### basicdaymean
+Plots the mean of all White Island S02 mini-DOAS fluxes, provided there are at least 5 observations a day. A day is the NZST day. These values are those traditionally presented by volcano-geochemists at volcano monitoring meetings.
+_Relevant files_
+- basicdaymean.py
+- basicdaymean.cfg
+
+
 ## Docker
 
 To install and run the scripts in a docker image proceed as follows.
