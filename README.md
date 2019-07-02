@@ -53,6 +53,11 @@ _Relevant files_
 ### isoplot
 Plot water isotope data as a cross-plot.
 
+_Relevant files_
+- isoplot.py
+- isoplot.cfg
+- isotopes_supplementary/
+![GitHub Logo](/readme_images/ruapehu.combi_365.png)
 
 ## Docker
 
