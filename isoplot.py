@@ -68,19 +68,36 @@ for site in sites:
     plt.scatter(dfo['obs'], dfh['obs'], marker='o', color='black', label='all obs')
     # plot recent data
     plt.scatter(dfo['obs'][-1:], dfh['obs'][-1:], color='red', s=100, label='last obs')  # last
-    #plot lmwl line
-    lmwl = pd.read_csv('isotopes_supplementary/isoplot_lmwl_fit.csv')
-    plt.plot(lmwl['delta18O'], lmwl['D'], color='black', label='LMWL', marker='None')
-    #plot local sampled meteoric waters
-    localmw = pd.read_csv('isotopes_supplementary/Rainwater_isotopes.csv')
-    plt.plot(localmw['delta18O'], localmw['D'], color='green', label='local meteoric', marker='o', linestyle='None')
-    #plot volcanic arc region
-    volcarc = pd.read_csv('isotopes_supplementary/VolcanicArc_isotopes.csv')
-    plt.plot(volcarc['delta18O'], volcarc['D'], color='red', marker='None', label='_nolegend_')
-    #and label
-    plt.text(9,-20,'volcanic arc',ha='center')
-    #plot 'by eye' mixing line for these data, as developed by Agnes Mazot
-    plt.plot([-9.7,9],[-62,-8], color='black', label='mixing line', marker='None', linestyle=':')
+
+    #plot contextural data
+    if (siteID == 'RU003') | (siteID == 'RU004'):
+        #plot lmwl line
+        lmwl = pd.read_csv('isotopes_supplementary/isoplot_lmwl_fit.csv')
+        plt.plot(lmwl['delta18O'], lmwl['D'], color='black', label='LMWL', marker='None')
+        #plot local sampled meteoric waters
+        localmw = pd.read_csv('isotopes_supplementary/Rainwater_isotopes.csv')
+        plt.plot(localmw['delta18O'], localmw['D'], color='green', label='local meteoric', marker='o', linestyle='None')
+        #plot volcanic arc region
+        volcarc = pd.read_csv('isotopes_supplementary/VolcanicArc_isotopes.csv')
+        plt.plot(volcarc['delta18O'], volcarc['D'], color='red', marker='None', label='_nolegend_')
+        #and label
+        plt.text(9,-20,'volcanic arc',ha='center')
+        #plot 'by eye' mixing line for these data, as developed by Agnes Mazot
+        plt.plot([-9.7,9],[-62,-8], color='black', label='mixing line', marker='None', linestyle=':')
+    elif (siteID== 'WI201'):
+        #plot lmwl line
+        #lmwl = pd.read_csv('isotopes_supplementary/isoplot_lmwl_fit.csv')
+        #plt.plot(lmwl['delta18O'], lmwl['D'], color='black', label='LMWL', marker='None')
+        #plot local sampled sea water
+        localmw = pd.read_csv('isotopes_supplementary/SeaWater_isotopes_whiteisland.csv')
+        plt.plot(localmw['delta18O'], localmw['D'], color='green', label='local sea water', marker='o', linestyle='None')
+        #plot volcanic arc region
+        volcarc = pd.read_csv('isotopes_supplementary/VolcanicArc_isotopes.csv')
+        plt.plot(volcarc['delta18O'], volcarc['D'], color='red', marker='None', label='_nolegend_')
+        #and label
+        plt.text(9,-20,'volcanic arc',ha='center')
+        #plot 'by eye' mixing line for these data, as developed by Agnes Mazot
+        plt.plot([-9.7,9],[-62,-8], color='black', label='mixing line', marker='None', linestyle=':')
 
     # label
     plt.xlabel('18O (per mil)')
