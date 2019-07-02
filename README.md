@@ -1,5 +1,5 @@
 # FITS_plotting
-Python plotting of volcano data from FITS
+Python plotting of volcano data from FITS. Several separate plots of different data that the volcano monitoring team as GNS require for assessment of data. Run daily under cron.
 
 ## Contents
 
