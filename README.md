@@ -51,7 +51,7 @@ _Relevant files_
 ![GitHub Logo](/readme_images/ruapehu.combi_365.png)
 
 ### isoplot
-Plot water isotope data as a cross-plot.
+Plot water isotope data as a cross-plot. For Ruapehu Crater Lake (two sites) and White Islabd Crater Lake.
 
 _Relevant files_
 - isoplot.py
