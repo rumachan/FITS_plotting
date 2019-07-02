@@ -57,7 +57,9 @@ _Relevant files_
 - isoplot.py
 - isoplot.cfg
 - isotopes_supplementary/
-![GitHub Logo](/readme_images/ruapehu.combi_365.png)
+![GitHub Logo](/readme_images/isotope_RU003.png)
+![GitHub Logo](/readme_images/isotope_RU004.png)
+![GitHub Logo](/readme_images/isotope_WI201.png)
 
 ## Docker
 
