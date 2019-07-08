@@ -1,5 +1,5 @@
 # FITS_plotting
-Python plotting of volcano data from FITS
+Python plotting of volcano data from FITS. Several separate plots of different data that the volcano monitoring team at GNS require for assessment of data. Run daily under cron.
 
 ## Contents
 
@@ -51,8 +51,15 @@ _Relevant files_
 ![GitHub Logo](/readme_images/ruapehu.combi_365.png)
 
 ### isoplot
-Plot water isotope data as a cross-plot.
+Plot water isotope data as a cross-plot. For Ruapehu Crater Lake (two sites) and White Islabd Crater Lake.
 
+_Relevant files_
+- isoplot.py
+- isoplot.cfg
+- isotopes_supplementary/
+![GitHub Logo](/readme_images/isotope_RU003.png)
+![GitHub Logo](/readme_images/isotope_RU004.png)
+![GitHub Logo](/readme_images/isotope_WI201.png)
 
 ## Docker
 
