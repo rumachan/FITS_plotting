@@ -86,18 +86,45 @@ for site in sites:
         plt.plot([-9.7,9],[-62,-8], color='black', label='mixing line', marker='None', linestyle=':')
     elif (siteID== 'WI201'):
         #plot lmwl line
-        #lmwl = pd.read_csv('isotopes_supplementary/isoplot_lmwl_fit.csv')
-        #plt.plot(lmwl['delta18O'], lmwl['D'], color='black', label='LMWL', marker='None')
+        lmwl = pd.read_csv('isotopes_supplementary/isoplot_lmwl_fit.csv')
+        plt.plot(lmwl['delta18O'], lmwl['D'], color='black', label='LMWL', marker='None')
         #plot local sampled sea water
-        localmw = pd.read_csv('isotopes_supplementary/SeaWater_isotopes_whiteisland.csv')
-        plt.plot(localmw['delta18O'], localmw['D'], color='green', label='local sea water', marker='o', linestyle='None')
+        localsw = pd.read_csv('isotopes_supplementary/SeaWater_isotopes_whiteisland.csv')
+        plt.plot(localsw['delta18O'], localsw['D'], color='blue', label='local sea water', marker='o', linestyle='None')
+        #plot local sampled meteoric water
+        localmw = pd.read_csv('isotopes_supplementary/MeteoricWaters_isotopes_whiteisland.csv')
+        plt.plot(localmw['delta18O'], localmw['D'], color='green', label='local meteoric', marker='o', linestyle='None')
         #plot volcanic arc region
         volcarc = pd.read_csv('isotopes_supplementary/VolcanicArc_isotopes.csv')
         plt.plot(volcarc['delta18O'], volcarc['D'], color='red', marker='None', label='_nolegend_')
         #and label
         plt.text(9,-20,'volcanic arc',ha='center')
         #plot 'by eye' mixing line for these data, as developed by Agnes Mazot
-        plt.plot([-9.7,9],[-62,-8], color='black', label='mixing line', marker='None', linestyle=':')
+        plt.plot([-5,11.5],[-22,24], color='black', label='mixing line', marker='None', linestyle=':')
+    elif (siteID== 'OT001'):
+        #plot lmwl line
+        lmwl = pd.read_csv('isotopes_supplementary/isoplot_lmwl_fit.csv')
+        plt.plot(lmwl['delta18O'], lmwl['D'], color='black', label='LMWL', marker='None')
+        #plot local sampled meteoric water
+        localmw = pd.read_csv('isotopes_supplementary/MeteoricWaters_isotopes_waimangu.csv')
+        plt.plot(localmw['delta18O'], localmw['D'], color='green', label='local meteoric', marker='o', linestyle='None')
+        #plot volcanic arc region
+        volcarc = pd.read_csv('isotopes_supplementary/VolcanicArc_isotopes.csv')
+        plt.plot(volcarc['delta18O'], volcarc['D'], color='red', marker='None', label='_nolegend_')
+        #and label
+        plt.text(9,-20,'volcanic arc',ha='center')
+    elif (siteID== 'OT002'):
+        #plot lmwl line
+        lmwl = pd.read_csv('isotopes_supplementary/isoplot_lmwl_fit.csv')
+        plt.plot(lmwl['delta18O'], lmwl['D'], color='black', label='LMWL', marker='None')
+        #plot local sampled meteoric water
+        localmw = pd.read_csv('isotopes_supplementary/MeteoricWaters_isotopes_waimangu.csv')
+        plt.plot(localmw['delta18O'], localmw['D'], color='green', label='local meteoric', marker='o', linestyle='None')
+        #plot volcanic arc region
+        volcarc = pd.read_csv('isotopes_supplementary/VolcanicArc_isotopes.csv')
+        plt.plot(volcarc['delta18O'], volcarc['D'], color='red', marker='None', label='_nolegend_')
+        #and label
+        plt.text(9,-20,'volcanic arc',ha='center')
 
     # label
     plt.xlabel('18O (per mil)')
@@ -108,8 +135,14 @@ for site in sites:
         plt.xlim(-12,12)
         plt.ylim(-80,0)
     elif (siteID== 'WI201'):
-        plt.xlim(-12,20)
-        plt.ylim(-80,60) 
+        plt.xlim(-10,20)
+        plt.ylim(-50,60) 
+    elif (siteID== 'OT001'):
+        plt.xlim(-10,15)
+        plt.ylim(-40,0) 
+    elif (siteID== 'OT002'):
+        plt.xlim(-10,15)
+        plt.ylim(-40,0) 
 
     title = (sitename + ' (' + siteID + ') : isotope data, last observation: ' + strlast)
     plt.legend(loc='upper left', scatterpoints=1)
