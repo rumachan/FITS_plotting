@@ -131,23 +131,27 @@ for id, day in days:
     dfcount = df['obs'].groupby(df['Datetime'].dt.date).count()
     dfcount.index = pd.to_datetime(dfcount.index)
 
-    # min/max obs per day
-    dfmin = df['tpd'].groupby(df['Datetime'].dt.date).min()
-    dfmax = df['tpd'].groupby(df['Datetime'].dt.date).max()
-    dfcount.index = pd.to_datetime(dfcount.index)
-    ax1.bar(dfcount.index, dfmax - dfmin, bottom=dfmin, width=0.01,
-            color='black', edgecolor='black', alpha=0.25, align='center', label='range')
-
     # median per day
     dfmedian = df['tpd'].groupby(df['Datetime'].dt.date).median()
-    ax1.plot(dfcount.index, dfmedian, marker='o', markersize=3,
+    ax1.plot(dfcount.index, dfmedian, marker='o', markersize=1.5,
              color='red', linestyle='None', label='median')
+
+    # min/max obs per day
+    #dfmin = df['tpd'].groupby(df['Datetime'].dt.date).min()
+    dfmax = df['tpd'].groupby(df['Datetime'].dt.date).max()
+    dfcount.index = pd.to_datetime(dfcount.index)
+    ax1.bar(dfcount.index, dfmax - dfmedian, bottom=dfmedian, width=0.01,
+            color='black', edgecolor='black', alpha=0.25, align='center', label='range')
+
+    # max per day
+    ax1.plot(dfcount.index, dfmax, marker='o', markersize=1,
+             color='black', alpha=0.25, linestyle='None', label='max')
 
     # 25th and 75th percentile
     dfup = df['tpd'].groupby(df['Datetime'].dt.date).quantile(0.75)
     dflp = df['tpd'].groupby(df['Datetime'].dt.date).quantile(0.25)
     ax1.bar(dfcount.index, dfup - dflp, bottom=dflp, width=0.1,
-            color='blue', edgecolor='blue', align='center', label='25th/75th %')
+            color='blue', edgecolor='blue', alpha=0.25, align='center', label='25th/75th %')
 
     ax1.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
     ax1.set_ylabel('SO2 flux (' + unit2 + ')')
