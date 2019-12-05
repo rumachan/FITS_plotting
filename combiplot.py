@@ -134,7 +134,7 @@ for id, day in days:
     # median per day
     dfmedian = df['tpd'].groupby(df['Datetime'].dt.date).median()
     ax1.plot(dfcount.index, dfmedian, marker='o', markersize=1.5,
-             color='red', linestyle='None', label='median')
+             color='red', alpha=0.25, linestyle='None', label='median')
 
     # min/max obs per day
     #dfmin = df['tpd'].groupby(df['Datetime'].dt.date).min()
@@ -144,8 +144,8 @@ for id, day in days:
             color='black', edgecolor='black', alpha=0.25, align='center', label='range')
 
     # max per day
-    ax1.plot(dfcount.index, dfmax, marker='o', markersize=1,
-             color='black', alpha=0.25, linestyle='None', label='max')
+    ax1.plot(dfcount.index, dfmax, marker='o', markersize=1.5,
+             color='black', alpha=0.5, linestyle='None', label='max')
 
     # 25th and 75th percentile
     dfup = df['tpd'].groupby(df['Datetime'].dt.date).quantile(0.75)
@@ -153,7 +153,7 @@ for id, day in days:
     ax1.bar(dfcount.index, dfup - dflp, bottom=dflp, width=0.1,
             color='blue', edgecolor='blue', alpha=0.25, align='center', label='25th/75th %')
 
-    ax1.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
+    ax1.grid(b=True, which='major', color='lightsalmon', linestyle='--', alpha=0.25)
     ax1.set_ylabel('SO2 flux (' + unit2 + ')')
     ax1.legend(loc='best', fontsize=8)
     ax1.set_ylim([0, ymax])
@@ -196,7 +196,7 @@ for id, day in days:
 
     ax2.legend(loc='best', fontsize=8)
     ax2.set_ylabel('Numbers Obs')
-    ax2.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
+    ax2.grid(b=True, which='major', color='lightsalmon', linestyle='--', alpha=0.25)
 
     # save plot
     if day == '365000':  # all data
