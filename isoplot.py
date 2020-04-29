@@ -9,7 +9,7 @@ import numpy as np
 from dateutil import parser
 import sys
 import os
-import ConfigParser
+import configparser
 
 names = ['dt', 'obs', 'err']
 
@@ -20,7 +20,7 @@ else:
     cfg = sys.argv[1]
 
 # parse configuration file
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(cfg)
 webserver = config.get('web', 'server')
 webuser = config.get('web', 'user')
@@ -40,7 +40,7 @@ for site in sites:
     payload = {'siteID': siteID}
     r = requests.get(url, params=payload)
     jdata = r.json()
-    sitename = jdata.values()[1][0]['properties']['name'].encode('ascii', 'ignore')
+    sitename = jdata['features'][0]['properties']['name']
 
     # figure set up
     fig = plt.figure(figsize=(xsize, ysize))

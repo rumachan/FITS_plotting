@@ -3,7 +3,7 @@ import matplotlib
 matplotlib.use('Agg')
 import sys
 import os
-import ConfigParser
+import configparser
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
@@ -18,7 +18,7 @@ def nameofsite(siteid):
     #get from a dictionary
     jdata = r.json()
     jdict = jdata['features'][0]
-    sitename = jdict['properties']['name'].encode('ascii','ignore')
+    sitename = jdict['properties']['name']
     return sitename
 
 def getsite(site):
@@ -37,7 +37,7 @@ else:
     cfg = sys.argv[1]
 
 # parse configuration file
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(cfg)
 webserver = config.get('web', 'server')
 webuser = config.get('web', 'user')

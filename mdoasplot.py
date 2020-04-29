@@ -3,7 +3,7 @@ import matplotlib
 matplotlib.use('Agg')
 import sys
 import os
-import ConfigParser
+import configparser
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,7 +19,7 @@ else:
     cfg = sys.argv[1]
 
 # parse configuration file
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(cfg)
 webserver = config.get('web', 'server')
 webuser = config.get('web', 'user')
@@ -36,7 +36,7 @@ for site in sites:
   siteid = site[1].split()[0]
   typeid = site[1].split()[1]
   methodid = site[1].split()[2]
-  print siteid, typeid, methodid
+  print (siteid, typeid, methodid)
 
   #sitename meta data
   url = 'http://fits.geonet.org.nz/site'
@@ -45,7 +45,7 @@ for site in sites:
   #get from a dictionary
   jdata = r.json()
   jdict = jdata['features'][0]
-  sitename = jdict['properties']['name'].encode('ascii','ignore')
+  sitename = jdict['properties']['name']
 
   #unit meta data
   #url = 'http://fits.geonet.org.nz/type'

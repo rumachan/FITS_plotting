@@ -13,12 +13,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import requests
-import pyproj
+from pyproj import Transformer
 import scipy.signal
 import sys
 import os
 import datetime
-import ConfigParser
+import configparser
 import numpy as np
 
 # coordinate conversion lat-lon to nzmg
@@ -26,10 +26,12 @@ import numpy as np
 
 def deg2nzmg(lon, lat):
     # define projections
-    proj_wgs84 = pyproj.Proj(init="epsg:4326")
-    proj_nzmg = pyproj.Proj(init="epsg:27200")
+    #proj_wgs84 = pyproj.Proj("epsg:4326")
+    #proj_nzmg = pyproj.Proj("epsg:27200")
+    transformer = Transformer.from_crs("epsg:4326", "epsg:27200")
     # convert coordinates from deg to NZMG
-    e, n = pyproj.transform(proj_wgs84, proj_nzmg, lon, lat)
+    #e, n = pyproj.transform(proj_wgs84, proj_nzmg, lon, lat)
+    e, n = transformer.transform(lat, lon)
     # return Easting and Northing in NZMG
     return e, n
 
@@ -40,7 +42,7 @@ else:
     cfg = sys.argv[1]
 
 # parse configuration file
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(cfg)
 server = config.get('web', 'server')
 user = config.get('web', 'user')
@@ -60,15 +62,15 @@ for section in config.sections():
 
 # loop through regions
 for reg in regions:
-    print 'region = ', reg
+    print ('region = ', reg)
     str = 'lines-' + reg
     lines = config.items('lines-' + reg)
     nlines = len(lines)
-    print 'nlines = ', nlines
+    print ('nlines = ', nlines)
 
     # loop through plot durations
     for id, day in days:
-        print 'days = ', day
+        print ('days = ', day)
 
         # plot for this region
         fig = plt.figure(figsize=(xsize, ysize * nlines))
@@ -79,7 +81,7 @@ for reg in regions:
             site2 = line[1].split()[1]
             siteid1 = site1
             siteid2 = site2
-            print '  plot = ', idx + 1, siteid1, siteid2
+            print ('  plot = ', idx + 1, siteid1, siteid2)
 
             # get position data for sites, FITS query
             # first site
@@ -88,11 +90,11 @@ for reg in regions:
             r = requests.get(url, params=payload)
             # get from a dictionary
             jdata = r.json()
-            lon = jdata.values()[1][0]['geometry']['coordinates'][0]
-            lat = jdata.values()[1][0]['geometry']['coordinates'][1]
+            lon = jdata['features'][0]['geometry']['coordinates'][0]
+            lat = jdata['features'][0]['geometry']['coordinates'][1]
             pos_e, pos_n = deg2nzmg(lon, lat)
-            # print 'coordinates ', siteid1, pos_e, pos_n
-            pos_z = jdata.values()[1][0]['properties']['height']
+            #print ('coordinates ', siteid1, pos_e, pos_n)
+            pos_z = jdata['features'][0]['properties']['height']
             # convert to mm
             pos_e *= 1000
             pos_n *= 1000
@@ -106,10 +108,10 @@ for reg in regions:
             r = requests.get(url, params=payload)
             # get from a dictionary
             jdata = r.json()
-            lon = jdata.values()[1][0]['geometry']['coordinates'][0]
-            lat = jdata.values()[1][0]['geometry']['coordinates'][1]
+            lon = jdata['features'][0]['geometry']['coordinates'][0]
+            lat = jdata['features'][0]['geometry']['coordinates'][1]
             pos_e, pos_n = deg2nzmg(lon, lat)
-            pos_z = jdata.values()[1][0]['properties']['height']
+            pos_z = jdata['features'][0]['properties']['height']
             # convert to mm
             pos_e *= 1000
             pos_n *= 1000

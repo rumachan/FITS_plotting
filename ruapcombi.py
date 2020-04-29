@@ -3,7 +3,7 @@ import matplotlib
 matplotlib.use('Agg')
 import sys
 import os
-import ConfigParser
+import configparser
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
@@ -49,7 +49,7 @@ else:
     cfg = sys.argv[1]
 
 # parse configuration file
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(cfg)
 webserver = config.get('web', 'server')
 webuser = config.get('web', 'user')
@@ -63,15 +63,15 @@ analytes = config.items('analytes')
 
 # loop through water sites, download and plot
 for nday, day in days:
-    print day
+    print (day)
     fig = plt.figure(figsize=(xsize, ysize * nplots))
 
     #***crater lake temperature***
-    print '***temperature***'
+    print ('***temperature***')
     ax1 = fig.add_subplot(nplots, 1, 1)
     temp1 = config.get('temps', 'temp1')
     (siteID, typeID, methodID) = getsitesingle(temp1)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     sitename = getsitename(siteID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
@@ -83,7 +83,7 @@ for nday, day in days:
 
     temp2 = config.get('temps', 'temp2')
     (siteID, typeID, methodID) = getsitesingle(temp2)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     sitename = getsitename(siteID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
@@ -95,7 +95,7 @@ for nday, day in days:
 
     temp3 = config.get('temps', 'temp3')
     (siteID, typeID, methodID) = getsitesingle(temp3)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     sitename = getsitename(siteID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
@@ -110,11 +110,11 @@ for nday, day in days:
     x1, x2 = ax1.get_xlim()
 
     #***TDS***
-    print '***TDS***'
+    print ('***TDS***')
     ax2 = fig.add_subplot(nplots, 1, 2, sharex=ax1)
     for (n, water) in enumerate(waterdata):
         (siteID, typeID, methodID) = getsite(water)
-        print n, siteID, typeID, methodID
+        print (n, siteID, typeID, methodID)
         url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
             siteID + \
             '&methodID=' + methodID + '&days=' + day
@@ -133,12 +133,12 @@ for nday, day in days:
     ax2.legend(loc='best', fontsize=10)
 
     #***Mg/Cl on same plot***
-    print '***Mg/Cl***'
+    print ('***Mg/Cl***')
     # alternate y-axis
     ax2a = ax2.twinx()
     mg = config.get('mgcl', 'mg')
     (siteID, typeID, methodID) = getsitesingle(mg)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
         '&methodID=' + methodID + '&days=' + day
@@ -146,7 +146,7 @@ for nday, day in days:
         url, names=names, skiprows=1, parse_dates={"Datetime": ['dt']})
     cl = config.get('mgcl', 'cl')
     (siteID, typeID, methodID) = getsitesingle(cl)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
         '&methodID=' + methodID + '&days=' + day
@@ -167,11 +167,11 @@ for nday, day in days:
     ax2a.legend(loc='lower right', fontsize=10)
 
     #***analytes***
-    print '***analytes***'
+    print ('***analytes***')
     axana = fig.add_subplot(nplots, 1, 3, sharex = ax1)
     for (n, analyte) in enumerate(analytes):
         (siteID, typeID, methodID) = getsite(analyte)
-        print n, siteID, typeID, methodID
+        print (n, siteID, typeID, methodID)
         url= 'https://fits.geonet.org.nz/observation?typeID='+typeID+'&siteID='+siteID+'&methodID='+methodID+'&days='+day
         df = pd.read_csv(url, names=names, skiprows=1, parse_dates={"Datetime" : ['dt']})
         axana.plot(df['Datetime'], df['obs'], marker='o', markersize=10, linewidth = 2, linestyle=':', label = typeID) 
@@ -180,13 +180,13 @@ for nday, day in days:
     axana.legend(loc = 'best', fontsize = 10)
 
     #***airborne gas flux***
-    print '***gas flux***'
+    print ('***gas flux***')
     ax3 = fig.add_subplot(nplots, 1, 4, sharex=ax1)
 
     #gas1
     gas1 = config.get('gases', 'gas1')
     (siteID, typeID, methodID) = getsitesingle(gas1)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
         '&methodID=' + methodID + '&days=' + day
@@ -198,7 +198,7 @@ for nday, day in days:
     #gas2
     gas2 = config.get('gases', 'gas2')
     (siteID, typeID, methodID) = getsitesingle(gas2)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
         '&methodID=' + methodID + '&days=' + day
@@ -227,7 +227,7 @@ for nday, day in days:
    #gas4
     gas4 = config.get('gases', 'gas4')
     (siteID, typeID, methodID) = getsitesingle(gas4)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
         '&methodID=' + methodID + '&days=' + day
@@ -241,7 +241,7 @@ for nday, day in days:
     #gas5
     gas5 = config.get('gases', 'gas5')
     (siteID, typeID, methodID) = getsitesingle(gas5)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
         '&methodID=' + methodID + '&days=' + day
@@ -264,12 +264,12 @@ for nday, day in days:
     #ax3a.set_ylabel('gas flux (t/d)', color='gray')
 
     #***molar ratio, CO2/SO2***
-    print '***molar ratio***'
+    print ('***molar ratio***')
     ax4 = fig.add_subplot(nplots, 1, 5, sharex=ax1)
 
     so2cosp = config.get('molar', 'so2cosp')
     (siteID, typeID, methodID) = getsitesingle(so2cosp)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
         '&methodID=' + methodID + '&days=' + day
@@ -278,7 +278,7 @@ for nday, day in days:
 
     so2cont = config.get('molar', 'so2cont')
     (siteID, typeID, methodID) = getsitesingle(so2cont)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
         '&methodID=' + methodID + '&days=' + day
@@ -287,7 +287,7 @@ for nday, day in days:
 
     co2cont = config.get('molar', 'co2cont')
     (siteID, typeID, methodID) = getsitesingle(co2cont)
-    print siteID, typeID, methodID
+    print (siteID, typeID, methodID)
     url = 'https://fits.geonet.org.nz/observation?typeID=' + typeID + '&siteID=' + \
         siteID + \
         '&methodID=' + methodID + '&days=' + day
@@ -318,7 +318,7 @@ for nday, day in days:
     plt.legend(loc='best', fontsize=10)
 
     #***RSAM***
-    print '***rsam***'
+    print ('***rsam***')
     ax5 = fig.add_subplot(nplots, 1, 6, sharex=ax1)
 
     rsamnames = ['dt', 'obs']
@@ -327,7 +327,6 @@ for nday, day in days:
         rsamfile, names=rsamnames, delim_whitespace=True, parse_dates={"Datetime": ['dt']})
     # some values = -1??? and cut time to x-axis start time
     x1dt = dates.num2date(x1)
-    #plot = dfrsam[(dfrsam['obs']>0)]
     plot = dfrsam[(dfrsam['obs'] > 0) & (dfrsam['Datetime'] > x1dt)]
     plt.plot(plot['Datetime'], plot['obs'], marker='None',
              color='red', linewidth=2, label='RSAM')
