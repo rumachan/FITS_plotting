@@ -326,8 +326,10 @@ for nday, day in days:
     dfrsam = pd.read_csv(
         rsamfile, names=rsamnames, delim_whitespace=True, parse_dates={"Datetime": ['dt']})
     # some values = -1??? and cut time to x-axis start time
+    # can get away without cutting time
     x1dt = dates.num2date(x1)
-    plot = dfrsam[(dfrsam['obs'] > 0) & (dfrsam['Datetime'] > x1dt)]
+    #plot = dfrsam[(dfrsam['obs'] > 0) & (dfrsam['Datetime'] > x1dt)]
+    plot = dfrsam[(dfrsam['obs'] > 0)]# & (dfrsam['Datetime'] > x1dt)]
     plt.plot(plot['Datetime'], plot['obs'], marker='None',
              color='red', linewidth=2, label='RSAM')
     ax5.grid(b=True, which='major', color='b', linestyle='--', alpha=0.5)
